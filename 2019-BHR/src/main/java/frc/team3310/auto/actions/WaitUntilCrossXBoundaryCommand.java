@@ -1,7 +1,6 @@
 package frc.team3310.auto.actions;
 
 import frc.team3310.utility.lib.control.RobotStatus;
-import edu.wpi.first.wpilibj.Timer;
 
 public class WaitUntilCrossXBoundaryCommand implements Action {
 

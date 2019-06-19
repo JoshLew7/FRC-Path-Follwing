@@ -1,7 +1,6 @@
 package frc.team3310.auto.commands;
 
 import frc.team3310.utility.lib.control.RobotStatus;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class WaitUntilCrossXBoundary extends Command {

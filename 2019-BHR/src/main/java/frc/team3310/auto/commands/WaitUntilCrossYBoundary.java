@@ -1,6 +1,5 @@
 package frc.team3310.auto.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team3310.robot.Robot;
 import frc.team3310.robot.paths.TrajectoryGenerator.RightLeftAutonSide;
