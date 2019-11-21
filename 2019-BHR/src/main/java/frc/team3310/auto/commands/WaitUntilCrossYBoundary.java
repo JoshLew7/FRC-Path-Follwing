@@ -1,5 +1,6 @@
 package frc.team3310.auto.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team3310.robot.Robot;
 import frc.team3310.robot.paths.TrajectoryGenerator.RightLeftAutonSide;
@@ -34,17 +35,17 @@ public class WaitUntilCrossYBoundary extends Command {
     public boolean isFinished() {
         if (validDirection) {
             if (mMovingDirection == MovingYDirection.OutsideToInside) {
-                return mFlip * RobotStatus.getInstance().getFieldToVehicle().getTranslation().y() > mYBoundary;
+                return mFlip * RobotStatus.getInstance().getFieldToVehicle(Timer.getFPGATimestamp()).getTranslation().y() > mYBoundary;
             } else {
-                return mFlip * RobotStatus.getInstance().getFieldToVehicle().getTranslation().y() < mYBoundary;
+                return mFlip * RobotStatus.getInstance().getFieldToVehicle(Timer.getFPGATimestamp()).getTranslation().y() < mYBoundary;
             }
         } else {
             if (mMovingDirection == MovingYDirection.OutsideToInside) {
                 validDirection = mFlip
-                        * RobotStatus.getInstance().getFieldToVehicle().getTranslation().y() < mYBoundary;
+                        * RobotStatus.getInstance().getFieldToVehicle(Timer.getFPGATimestamp()).getTranslation().y() < mYBoundary;
             } else {
                 validDirection = mFlip
-                        * RobotStatus.getInstance().getFieldToVehicle().getTranslation().y() > mYBoundary;
+                        * RobotStatus.getInstance().getFieldToVehicle(Timer.getFPGATimestamp()).getTranslation().y() > mYBoundary;
             }
             if (validDirection == true) {
                 // System.out.println(

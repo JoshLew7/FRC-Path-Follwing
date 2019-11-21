@@ -55,7 +55,7 @@ public class DriveMotionCommand extends Command {
       RobotStatus.getInstance().reset(Timer.getFPGATimestamp(), mTrajectory.getState().state().getPose());
     }
     else if (mResetXYPose) {
-      Pose2d resetPose = new Pose2d(mTrajectory.getState().state().getPose().getTranslation(), RobotStatus.getInstance().getFieldToVehicle().getRotation());
+      Pose2d resetPose = new Pose2d(mTrajectory.getState().state().getPose().getTranslation(), RobotStatus.getInstance().getFieldToVehicle(Timer.getFPGATimestamp()).getRotation());
       RobotStatus.getInstance().reset(Timer.getFPGATimestamp(), resetPose);
     }
 

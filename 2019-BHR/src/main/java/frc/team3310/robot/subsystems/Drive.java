@@ -45,13 +45,10 @@ public class Drive extends Subsystem implements Loop {
 	};
 
 	// One revolution of the wheel = Pi * D inches = 4096 ticks
+	// Track Width Flange to Flange Measurement 
 	public static final double ENCODER_TICKS_TO_INCHES = 4096.0 / (Constants.kDriveWheelDiameterInches * Math.PI);
-	public static final double INCHES_TO_ENCODER_TICKS_MIDDLE_DRIVE = 42.0 / 18.0 * 4096.0 / (2.38 * Math.PI);
 	private static final double DRIVE_ENCODER_PPR = 4096.;
-	public static final double TRACK_WIDTH_INCHES = 23.92; // 24.56; // 26.937;
-
-	public static final double OPEN_LOOP_VOLTAGE_RAMP_HI = 0.0;
-	public static final double OPEN_LOOP_VOLTAGE_RAMP_LO = 0.1;
+	public static final double TRACK_WIDTH_INCHES = 23.92;
 
 	// Motor controllers
 	private ArrayList<TalonSRXEncoder> motorControllers = new ArrayList<TalonSRXEncoder>();
@@ -69,13 +66,13 @@ public class Drive extends Subsystem implements Loop {
 	protected Rotation2d mAngleAdjustment = Rotation2d.identity();
 	private DriveControlMode driveControlMode = DriveControlMode.JOYSTICK;
 
-	public double targetDrivePositionTicks;
 	private boolean isFinished;
 	private boolean mIsBrakeMode = false;
 
 	private static final int kPositionControlSlot = 0;
 	private static final int kVelocityControlSlot = 1;
 
+	//Pigeon Setup
 	private PigeonIMU gyroPigeon;
 	private double[] yprPigeon = new double[3];
 	private short[] xyzPigeon = new short[3];
@@ -88,6 +85,9 @@ public class Drive extends Subsystem implements Loop {
 	private DriveMotionPlanner mMotionPlanner;
 	private Rotation2d mGyroOffset = Rotation2d.identity();
 	public boolean mOverrideTrajectory = false;
+
+	// Misc Variables
+	public double targetDrivePositionTicks;
 
 	@Override
 	public void onStart(double timestamp) {
@@ -520,7 +520,7 @@ public class Drive extends Subsystem implements Loop {
 			final double now = Timer.getFPGATimestamp();
 
 			DriveMotionPlanner.Output output = mMotionPlanner.update(now,
-					RobotStatus.getInstance().getFieldToVehicle());
+					RobotStatus.getInstance().getFieldToVehicle(now));
 
 			// DriveSignal signal = new DriveSignal(demand.left_feedforward_voltage / 12.0,
 			// demand.right_feedforward_voltage / 12.0);
@@ -644,6 +644,8 @@ public class Drive extends Subsystem implements Loop {
 			setControlMode(DriveControlMode.JOYSTICK);
 		}
 	}
+
+	
 
 	public boolean isBrakeMode() {
 		return mIsBrakeMode;

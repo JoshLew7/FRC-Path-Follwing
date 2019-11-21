@@ -1,6 +1,7 @@
 package frc.team3310.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.team3310.robot.Kinematics;
 import frc.team3310.robot.loops.ILooper;
 import frc.team3310.robot.loops.Loop;
 import frc.team3310.utility.lib.control.RobotStatus;
@@ -60,12 +61,12 @@ public class RobotStateEstimator extends Subsystem {
             final Rotation2d gyro_angle = drive_.getHeading();
             final Twist2d odometry_velocity = robot_state_.generateOdometryFromSensors(delta_left, delta_right,
                     gyro_angle);
-            // final Twist2d predicted_velocity =
-            // Kinematics.forwardKinematics(drive_.getLeftLinearVelocity(),
-            // drive_.getRightLinearVelocity());
-            // robot_state_.addObservations(timestamp, odometry_velocity,
-            // predicted_velocity);
-            robot_state_.addObservations(timestamp, odometry_velocity);
+            final Twist2d predicted_velocity =
+            Kinematics.forwardKinematics(drive_.getLeftLinearVelocity(),
+            drive_.getRightLinearVelocity());
+            robot_state_.addObservations(timestamp, odometry_velocity,
+            predicted_velocity);
+            // robot_state_.addObservations(timestamp, odometry_velocity);
             left_encoder_prev_distance_ = left_distance;
             right_encoder_prev_distance_ = right_distance;
         }
