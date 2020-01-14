@@ -2,7 +2,6 @@ package com.team3310.frc2019;
 
 import org.junit.jupiter.api.Test;
 
-import frc.team3310.auto.AutoConstants;
 import frc.team3310.robot.paths.TrajectoryGenerator;
 
 public class AutoModeTimingTest {
@@ -13,23 +12,35 @@ public class AutoModeTimingTest {
     void checkTimingTest() {
         mTrajectoryGenerator.generateTrajectories();
 
-        // double nearScaleDuration = mTrajectoryGenerator.getTrajectorySet().sideStartToNearScale.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().nearScaleToNearFence.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().nearFenceToNearScale.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().nearScaleToNearFence2.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().nearFence2ToNearScale.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().nearScaleToNearFence3.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().nearFence3ToNearScale.get(mStartedLeft).getLastState().t();
+        // double nearScaleDuration =
+        // mTrajectoryGenerator.getTrajectorySet().sideStartToNearScale.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().nearScaleToNearFence.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().nearFenceToNearScale.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().nearScaleToNearFence2.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().nearFence2ToNearScale.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().nearScaleToNearFence3.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().nearFence3ToNearScale.get(mStartedLeft).getLastState().t();
         // double nearScaleBestCaseWait = 3 * AutoConstants.kWaitForCubeTime;
         // double nearScaleWorstCaseWait = nearScaleBestCaseWait + 0.5 * 4;
 
-
-        // double farScaleDuration = mTrajectoryGenerator.getTrajectorySet().sideStartToFarScale.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().farScaleToFarFence.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().farFenceToFarScale.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().farScaleToFarFence2.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().farFence2ToFarScale.get(mStartedLeft).getLastState().t() +
-        //         mTrajectoryGenerator.getTrajectorySet().farScaleToFarFence3.get(mStartedLeft).getLastState().t();
+        // double farScaleDuration =
+        // mTrajectoryGenerator.getTrajectorySet().sideStartToFarScale.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().farScaleToFarFence.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().farFenceToFarScale.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().farScaleToFarFence2.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().farFence2ToFarScale.get(mStartedLeft).getLastState().t()
+        // +
+        // mTrajectoryGenerator.getTrajectorySet().farScaleToFarFence3.get(mStartedLeft).getLastState().t();
         // double farScaleBestCaseWait = 2 * AutoConstants.kWaitForCubeTime;
         // double farScaleWorstCaseWait = farScaleBestCaseWait + 0.5 * 3;
 

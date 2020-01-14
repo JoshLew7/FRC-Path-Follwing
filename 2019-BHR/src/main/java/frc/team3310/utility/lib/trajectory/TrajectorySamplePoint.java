@@ -1,4 +1,5 @@
 package frc.team3310.utility.lib.trajectory;
+
 import frc.team3310.utility.lib.geometry.State;
 
 public class TrajectorySamplePoint<S extends State<S>> {

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DriveCharacterization {
     public static class CharacterizationConstants {
-        public double ks; //voltage needed to break static friction
+        public double ks; // voltage needed to break static friction
         public double kv;
         public double ka;
     }
@@ -40,7 +40,8 @@ public class DriveCharacterization {
         public final double left_voltage;
         public final double right_voltage;
 
-        public CurvatureDataPoint(double linear_velocity, double angular_velocity, double left_voltage, double right_voltage) {
+        public CurvatureDataPoint(double linear_velocity, double angular_velocity, double left_voltage,
+                double right_voltage) {
             this.linear_velocity = linear_velocity;
             this.angular_velocity = angular_velocity;
             this.left_voltage = left_voltage;
@@ -48,7 +49,8 @@ public class DriveCharacterization {
         }
     }
 
-    public static CharacterizationConstants characterizeDrive(List<VelocityDataPoint> velocityData, List<AccelerationDataPoint> accelerationData) {
+    public static CharacterizationConstants characterizeDrive(List<VelocityDataPoint> velocityData,
+            List<AccelerationDataPoint> accelerationData) {
         CharacterizationConstants rv = getVelocityCharacterization(getVelocityData(velocityData));
         getAccelerationCharacterization(getAccelerationData(accelerationData, rv), rv);
         return rv;
@@ -66,7 +68,8 @@ public class DriveCharacterization {
         return constants;
     }
 
-    private static CharacterizationConstants getAccelerationCharacterization(double[][] points, CharacterizationConstants velocityChacterization) {
+    private static CharacterizationConstants getAccelerationCharacterization(double[][] points,
+            CharacterizationConstants velocityChacterization) {
         if (points == null) {
             return velocityChacterization;
         }
@@ -96,7 +99,8 @@ public class DriveCharacterization {
         return output;
     }
 
-    private static double[][] getAccelerationData(List<AccelerationDataPoint> input, CharacterizationConstants constants) {
+    private static double[][] getAccelerationData(List<AccelerationDataPoint> input,
+            CharacterizationConstants constants) {
         double[][] output = new double[input.size()][2];
         for (int i = 0; i < input.size(); ++i) {
             output[i][0] = input.get(i).acceleration;

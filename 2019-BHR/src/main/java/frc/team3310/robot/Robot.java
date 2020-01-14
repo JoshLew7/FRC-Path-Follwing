@@ -7,185 +7,220 @@
 
 package frc.team3310.robot;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import java.util.Arrays;
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.team3310.auto.commands.LazyLoadCommandGroup;
+import frc.team3310.robot.AutoModeSelector.DesiredMode;
+import frc.team3310.robot.auto.AutoModeExecutor;
+import frc.team3310.robot.auto.AutoRoutineBase;
 import frc.team3310.robot.loops.Looper;
 import frc.team3310.robot.paths.TrajectoryGenerator;
-import frc.team3310.robot.paths.TrajectoryGenerator.RightLeftAutonSide;
 import frc.team3310.robot.subsystems.Drive;
 import frc.team3310.robot.subsystems.Drive.DriveControlMode;
 import frc.team3310.robot.subsystems.RobotStateEstimator;
-import frc.team3310.utility.lib.control.RobotStatus;
+import frc.team3310.utility.CrashTracker;
+import frc.team3310.utility.lib.geometry.Pose2d;
 
 public class Robot extends TimedRobot {
 	// public static OI oi;
 
-	// Declare subsystems
-	public static final Drive drive = Drive.getInstance();
-	public static final RobotStateEstimator estimator = RobotStateEstimator.getInstance();
-	public static final TrajectoryGenerator trajectoryGenerator = TrajectoryGenerator.getInstance();
-
 	// Control looper
-	public static final Looper controlLoop = new Looper();
+	private Looper mEnabledLooper = new Looper();
+	private Looper mDisabledLooper = new Looper();
 
-	// Choosers
-	private SendableChooser<OperationMode> operationModeChooser;
-	private SendableChooser<Command> autonTaskChooser;
-	private SendableChooser<RightLeftAutonSide> autonRightLeftChooser;
-	private Command autonomousCommand;
-	private Command previousAutonomousCommand;
+	private TrajectoryGenerator mTrajectoryGenerator = TrajectoryGenerator.getInstance();
+	private AutoModeSelector mAutoModeSelector = new AutoModeSelector();
+	private AutoModeExecutor mAutoModeExecutor;
+	private DesiredMode mOperationMode;
 
-	public static enum OperationMode {
-		TEST, PRACTICE, COMPETITION
-	};
+	private final SubsystemManager mSubsystemManager = new SubsystemManager(
+			Arrays.asList(RobotStateEstimator.getInstance(), Drive.getInstance()));
 
-	public static OperationMode operationMode = OperationMode.COMPETITION;
-
-	public static RightLeftAutonSide rightLeftSide = RightLeftAutonSide.RIGHT;
-
-	// PDP
-	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
-
-	// State
-	private RobotStatus robotState = RobotStatus.getInstance();
+	// Declare subsystems
+	private Drive mDrive = Drive.getInstance();
+	private RobotStateEstimator mRobotStateEstimator = RobotStateEstimator.getInstance();
 
 	public Robot() {
-		super(Constants.kLooperDt * 2);
-		// System.out.println("Main loop period = " + getPeriod());
+		CrashTracker.logRobotConstruction();
 	}
 
 	public void zeroAllSensors() {
-		drive.zeroSensors();
+		mDrive.zeroSensors();
 	}
 
 	// Called at the start of connection
 	@Override
 	public void robotInit() {
 		// oi = OI.getInstance();
+		try {
+			// UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+			// camera.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 15);
+			// MjpegServer cameraServer = new MjpegServer("serve_USB Camera 0",
+			// Constants.kCameraStreamPort);
+			// cameraServer.setSource(camera);
 
-		controlLoop.register(drive);
-		RobotStateEstimator.getInstance().registerEnabledLoops(controlLoop);
-		trajectoryGenerator.generateTrajectories();
+			CrashTracker.logRobotInit();
 
-		operationModeChooser = new SendableChooser<OperationMode>();
-		operationModeChooser.addOption("Practice", OperationMode.PRACTICE);
-		operationModeChooser.setDefaultOption("Competition", OperationMode.COMPETITION);
-		operationModeChooser.addOption("Test", OperationMode.TEST);
-		SmartDashboard.putData("Operation Mode", operationModeChooser);
+			mSubsystemManager.registerEnabledLoops(mEnabledLooper);
+			mSubsystemManager.registerDisabledLoops(mDisabledLooper);
 
-		autonTaskChooser = new SendableChooser<Command>();
+			mTrajectoryGenerator.generateTrajectories();
+			mAutoModeSelector.updateModeCreator();
 
-		autonTaskChooser.setDefaultOption("None", null);
+			zeroAllSensors();
 
-		SmartDashboard.putData("Autonomous", autonTaskChooser);
-
-		autonRightLeftChooser = new SendableChooser<RightLeftAutonSide>();
-		autonRightLeftChooser.addOption("Left", RightLeftAutonSide.LEFT);
-		autonRightLeftChooser.setDefaultOption("Right", RightLeftAutonSide.RIGHT);
-		SmartDashboard.putData("Auton Side", autonRightLeftChooser);
-
-		LiveWindow.setEnabled(false);
-		LiveWindow.disableAllTelemetry();
-
-		zeroAllSensors();
+		} catch (Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
 	}
 
 	// Called every loop for all modes
 	public void robotPeriodic() {
-		updateStatus();
+		// outputToSmartDashboard();
 	}
 
 	// Called once when is disabled
 	@Override
 	public void disabledInit() {
+		SmartDashboard.putString("Match Cycle", "DISABLED");
+
+		try {
+			CrashTracker.logDisabledInit();
+			mEnabledLooper.stop();
+			if (mAutoModeExecutor != null) {
+				mAutoModeExecutor.stop();
+			}
+
+			// mInfrastructure.setIsDuringAuto(true);
+			mDrive.zeroSensors();
+			RobotState.getInstance().reset(Timer.getFPGATimestamp(), Pose2d.identity());
+
+			// Reset all auto mode state.
+			mAutoModeSelector.reset();
+			mAutoModeSelector.updateModeCreator();
+			mAutoModeExecutor = new AutoModeExecutor();
+
+			mDisabledLooper.start();
+
+		} catch (Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
 	}
 
 	// Called constantly when the robot is disabled
 	@Override
 	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
+		SmartDashboard.putString("Match Cycle", "DISABLED");
 
-		autonomousCommand = autonTaskChooser.getSelected();
-		if (autonomousCommand != previousAutonomousCommand) {
-			if (autonomousCommand != null && autonomousCommand instanceof LazyLoadCommandGroup) {
-				LazyLoadCommandGroup lazyLoad = (LazyLoadCommandGroup) autonomousCommand;
-				// System.out.println("Activate auton");
-				// double startTime = Timer.getFPGATimestamp();
-				lazyLoad.activate();
-				// System.out.println("Activate auton complete t = " + (Timer.getFPGATimestamp()
-				// - startTime) + " sec");
-				previousAutonomousCommand = autonomousCommand;
+		try {
+			mOperationMode = mAutoModeSelector.getDesiredMode();
+			outputToSmartDashboard();
+			mAutoModeSelector.updateModeCreator();
+
+			Optional<AutoRoutineBase> autoMode = mAutoModeSelector.getAutoMode();
+			if (autoMode.isPresent() && autoMode.get() != mAutoModeExecutor.getAutoMode()) {
+				System.out.println("Set auto mode to: " + autoMode.get().getClass().toString());
+				mAutoModeExecutor.setAutoMode(autoMode.get());
 			}
+			System.gc();
+		} catch (Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
 		}
 	}
 
 	// Called once at the start of auto
 	@Override
 	public void autonomousInit() {
-		controlLoop.start();
-		zeroAllSensors();
+		SmartDashboard.putString("Match Cycle", "AUTONOMOUS");
 
-		rightLeftSide = autonRightLeftChooser.getSelected();
-		trajectoryGenerator.setRightLeftAutonSide(rightLeftSide);
+		try {
+			CrashTracker.logAutoInit();
+			mDisabledLooper.stop();
 
-		if (autonomousCommand != null) {
-			autonomousCommand.start();
+			RobotState.getInstance().reset(Timer.getFPGATimestamp(), Pose2d.identity());
+
+			mDrive.zeroSensors();
+
+			mAutoModeExecutor.start();
+
+			mEnabledLooper.start();
+
+		} catch (Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
 		}
 	}
 
 	// Called constantly through auton
 	@Override
 	public void autonomousPeriodic() {
-		Scheduler.getInstance().run();
+		SmartDashboard.putString("Match Cycle", "AUTONOMOUS");
+
+		outputToSmartDashboard();
+		try {
+
+		} catch (Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
 
 	}
 
 	// Called once at the start of teleOp
 	@Override
 	public void teleopInit() {
-		if (autonomousCommand != null) {
-			autonomousCommand.cancel();
+		SmartDashboard.putString("Match Cycle", "TELEOP");
 
-		}
+		try {
+			CrashTracker.logTeleopInit();
+			mDisabledLooper.stop();
+			if (mAutoModeExecutor != null) {
+				mAutoModeExecutor.stop();
+			}
 
-		operationMode = operationModeChooser.getSelected();
-		drive.setControlMode(DriveControlMode.JOYSTICK);
+			mDrive.setControlMode(DriveControlMode.JOYSTICK);
 
-		controlLoop.start();
-		drive.endGyroCalibration();
+			mDrive.endGyroCalibration();
 
-		if (operationMode == OperationMode.COMPETITION) {
-			// Robot.elevator.setJoystickPID();
-		}
+			if (mOperationMode == DesiredMode.COMPETITION) {
+				// Robot.elevator.setJoystickPID();
+			}
 
-		if (operationMode != OperationMode.COMPETITION) {
-			// Scheduler.getInstance().add(new ElevatorAutoZeroSensor());
+			if (mOperationMode != DesiredMode.COMPETITION) {
+				// Scheduler.getInstance().add(new ElevatorAutoZeroSensor());
+			}
+
+			RobotState.getInstance().reset(Timer.getFPGATimestamp(), Pose2d.identity());
+			mEnabledLooper.start();
+
+		} catch (Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
 		}
 	}
 
 	// Called constantly through teleOp
 	@Override
 	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
+		SmartDashboard.putString("Match Cycle", "TELEOP");
+
+		try {
+
+			outputToSmartDashboard();
+		} catch (Throwable t) {
+			CrashTracker.logThrowableCrash(t);
+			throw t;
+		}
 	}
 
-	public Alliance getAlliance() {
-		return m_ds.getAlliance();
-	}
-
-	public double getMatchTime() {
-		return m_ds.getMatchTime();
-	}
-
-	public void updateStatus() {
-		drive.updateStatus(operationMode);
-		robotState.updateStatus(operationMode);
+	public void outputToSmartDashboard() {
+		mDrive.outputTelemetry(mOperationMode);
+		mRobotStateEstimator.outputTelemetry(mOperationMode);
 	}
 }

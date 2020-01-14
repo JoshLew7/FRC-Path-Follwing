@@ -34,6 +34,7 @@ public class Constants {
     // kv:0.14242500692715937
     // ka:0.03305866811140018
 
+    // TODO: Tune Constants for 2020 Season
     // Wheels
     // 2019 Robot Values
     public static final double kDriveWheelTrackWidthInches = 28.00; // 22.61;
@@ -42,9 +43,9 @@ public class Constants {
     public static final double kTrackScrubFactor = 0.9; // 0.924; // Tune me!
 
     // Tuned dynamics
-    public static final double kRobotLinearInertia = 48.0; // kg TODO tune
-    public static final double kRobotAngularInertia = 10.0; // kg m^2 TODO tune
-    public static final double kRobotAngularDrag = 12.0; // N*m / (rad/sec) TODO tune
+    public static final double kRobotLinearInertia = 48.0; // kg
+    public static final double kRobotAngularInertia = 10.0; // kg m^2
+    public static final double kRobotAngularDrag = 12.0; // N*m / (rad/sec)
     public static final double kDriveVIntercept = 0.928112644250295; // V
     public static final double kDriveKv = 0.10305; // 0.14242500692715937; // V per rad/s
     public static final double kDriveKa = 0.01; // 0.011505866811140018; // V per rad/s^2
@@ -55,7 +56,6 @@ public class Constants {
     public static final double finishedAtRocketUlt = 8.5;
     public static final double finishedAtLoadingUlt = 10.75;
     public static final double finishedAtCargoUlt = 12;
-
 
     // Geometry
     // 2019 Robot Values
@@ -169,7 +169,7 @@ public class Constants {
     public static final double kMiddleDrivePeakReverse = -1.0;
 
     public static final int kClimbCruiseVelocity = 8000; // 12500; //Max Velocity 10475
-    public static final int kClimbAcceleration = 15000;  //27000 // 33000; //Max Velocity / Time to reach top .82
+    public static final int kClimbAcceleration = 15000; // 27000 // 33000; //Max Velocity / Time to reach top .82
     public static final int kClimbScurveStrength = 0;
 
     // 2019 Elevator Levels
@@ -186,7 +186,7 @@ public class Constants {
     public static final double LOADING_STATION_HATCH = 19.5;
     public static final double CLIMB_LVL_3 = 19.5;
     public static final double CLIMB_LVL_3_FORKS = 21;
-    public static final double CLIMB_LVL_3_SUCC = 21.00; //23
+    public static final double CLIMB_LVL_3_SUCC = 21.00; // 23
     public static final double CLIMB_LVL2_TO_LVL3 = 14.25;
     public static final double CLIMB_LIFT_BACK = 3.5;
     public static final double CLIMB_LIFT_FRONT = 2;

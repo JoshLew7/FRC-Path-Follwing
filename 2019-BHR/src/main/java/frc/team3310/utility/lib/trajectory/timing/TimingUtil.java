@@ -3,9 +3,9 @@ package frc.team3310.utility.lib.trajectory.timing;
 import java.util.ArrayList;
 import java.util.List;
 
+import frc.team3310.utility.lib.geometry.State;
 import frc.team3310.utility.lib.trajectory.DistanceView;
 import frc.team3310.utility.lib.trajectory.Trajectory;
-import frc.team3310.utility.lib.geometry.State;
 
 public class TimingUtil {
     public static <S extends State<S>> Trajectory<TimedState<S>> timeParameterizeTrajectory(

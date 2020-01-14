@@ -27,34 +27,25 @@ public class TimingUtilTest {
     public static final double kTestEpsilon = Util.kEpsilon;
 
     public static final List<Translation2d> kWaypoints = Arrays.asList(new Translation2d(0.0, 0.0),
-            new Translation2d(24.0, 0.0),
-            new Translation2d(36.0, 12.0),
-            new Translation2d(60.0, 12.0));
+            new Translation2d(24.0, 0.0), new Translation2d(36.0, 12.0), new Translation2d(60.0, 12.0));
 
     public <S extends State<S>> Trajectory<TimedState<S>> buildAndCheckTrajectory(final DistanceView<S> dist_view,
-                                                                                  double step_size,
-                                                                                  List<TimingConstraint<S>> constraints,
-                                                                                  double start_vel,
-                                                                                  double end_vel,
-                                                                                  double max_vel,
-                                                                                  double max_acc) {
-        Trajectory<TimedState<S>> timed_traj = TimingUtil
-                .timeParameterizeTrajectory(false, dist_view, step_size, constraints, start_vel, end_vel, max_vel, max_acc);
+            double step_size, List<TimingConstraint<S>> constraints, double start_vel, double end_vel, double max_vel,
+            double max_acc) {
+        Trajectory<TimedState<S>> timed_traj = TimingUtil.timeParameterizeTrajectory(false, dist_view, step_size,
+                constraints, start_vel, end_vel, max_vel, max_acc);
         checkTrajectory(timed_traj, constraints, start_vel, end_vel, max_vel, max_acc);
         return timed_traj;
     }
 
     public <S extends State<S>> void checkTrajectory(final Trajectory<TimedState<S>> traj,
-                                                     List<TimingConstraint<S>> constraints,
-                                                     double start_vel,
-                                                     double end_vel,
-                                                     double max_vel,
-                                                     double max_acc) {
+            List<TimingConstraint<S>> constraints, double start_vel, double end_vel, double max_vel, double max_acc) {
         assertFalse(traj.isEmpty());
         assertEquals(traj.getState(0).velocity(), start_vel, kTestEpsilon);
         assertEquals(traj.getState(traj.length() - 1).velocity(), end_vel, kTestEpsilon);
 
-        // Go state by state, verifying all constraints are satisfied and integration is correct.
+        // Go state by state, verifying all constraints are satisfied and integration is
+        // correct.
         for (int i = 0; i < traj.length(); ++i) {
             final TimedState<S> state = traj.getState(i);
             for (final TimingConstraint<S> constraint : constraints) {
@@ -109,8 +100,7 @@ public class TimingUtilTest {
             }
 
             @Override
-            public TimingConstraint.MinMaxAcceleration getMinMaxAcceleration(S state,
-                                                                             double velocity) {
+            public TimingConstraint.MinMaxAcceleration getMinMaxAcceleration(S state, double velocity) {
                 return new TimingConstraint.MinMaxAcceleration(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
             }
         }
@@ -133,8 +123,7 @@ public class TimingUtilTest {
             }
 
             @Override
-            public TimingConstraint.MinMaxAcceleration getMinMaxAcceleration(S state,
-                                                                             double velocity) {
+            public TimingConstraint.MinMaxAcceleration getMinMaxAcceleration(S state, double velocity) {
                 return new TimingConstraint.MinMaxAcceleration(-10.0, 10.0 / velocity);
             }
         }

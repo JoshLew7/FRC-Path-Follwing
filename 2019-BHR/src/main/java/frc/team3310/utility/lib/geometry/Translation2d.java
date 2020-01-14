@@ -1,8 +1,8 @@
 package frc.team3310.utility.lib.geometry;
 
-import frc.team3310.utility.Util;
-
 import java.text.DecimalFormat;
+
+import frc.team3310.utility.Util;
 
 /**
  * A translation in a 2d coordinate frame. Translations are simply shifts in an (x, y) plane.

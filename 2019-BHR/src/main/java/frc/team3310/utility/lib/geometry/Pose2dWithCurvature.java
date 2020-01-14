@@ -1,8 +1,8 @@
 package frc.team3310.utility.lib.geometry;
 
-import frc.team3310.utility.Util;
-
 import java.text.DecimalFormat;
+
+import frc.team3310.utility.Util;
 
 public class Pose2dWithCurvature implements IPose2d<Pose2dWithCurvature>, ICurvature<Pose2dWithCurvature> {
     protected static final Pose2dWithCurvature kIdentity = new Pose2dWithCurvature();

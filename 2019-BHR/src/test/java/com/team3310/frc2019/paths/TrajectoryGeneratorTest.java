@@ -70,17 +70,17 @@ public class TrajectoryGeneratorTest {
                                         final double actual_right_curvature = right_change.dtheta / right_change.dx;
                                         if (actual_left_curvature < -kTestEpsilon) {
                                                 System.out.println("Left < curvature = " + actual_left_curvature);
- //                                               assertTrue(left_curvature_negative);
+                                                assertTrue(left_curvature_negative);
                                         } else if (actual_left_curvature > kTestEpsilon) {
                                                 System.out.println("Left > curvature = " + actual_left_curvature);
-//                                               assertTrue(left_curvature_positive);
+                                                assertTrue(left_curvature_positive);
                                         }
                                         if (actual_right_curvature < -kTestEpsilon) {
                                                 System.out.println("Right < curvature = " + actual_left_curvature);
-//                                               assertTrue(right_curvature_negative);
+                                                assertTrue(right_curvature_negative);
                                         } else if (actual_right_curvature > kTestEpsilon) {
                                                 System.out.println("Right > curvature = " + actual_left_curvature);
-//                                               assertTrue(right_curvature_positive);
+                                                assertTrue(right_curvature_positive);
                                         }
                                 }
                         }
@@ -105,16 +105,15 @@ public class TrajectoryGeneratorTest {
         public void test() {
                 TrajectoryGenerator.getInstance().generateTrajectories();
 
-                // LazyLoadTrajectory level1StartToRocketFront = TrajectoryGenerator.getInstance().getTrajectorySet().level1StartToRocketFront;
-                // level1StartToRocketFront.activate();
-                // verifyMirroredTrajectories(level1StartToRocketFront.getTrajectory(), false);
+                LazyLoadTrajectory level1StartToRocketFront = TrajectoryGenerator.getInstance()
+                                .getTrajectorySet().level1StartToRocketFront;
+                level1StartToRocketFront.activate();
+                verifyMirroredTrajectories(level1StartToRocketFront.getTrajectory(), false);
 
-                LazyLoadTrajectory loadingToRocketBack = TrajectoryGenerator.getInstance().getTrajectorySet().loadingToRocketBack;
-                loadingToRocketBack.activate();
-                verifyMirroredTrajectories(loadingToRocketBack.getTrajectory(), true);
-
-                // verifyMirroredTrajectories(TrajectoryGenerator.getInstance().getTrajectorySet().rocketFrontToLoading,
-                // true);
+                LazyLoadTrajectory level1StartReversedToCargoSide = TrajectoryGenerator.getInstance()
+                                .getTrajectorySet().level1StartReversedToCargoSide;
+                level1StartReversedToCargoSide.activate();
+                verifyMirroredTrajectories(level1StartReversedToCargoSide.getTrajectory(), true);
 
         }
 }

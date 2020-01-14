@@ -1,7 +1,8 @@
 package frc.team3310.utility.lib.geometry;
 
-import frc.team3310.utility.Util;
 import java.text.DecimalFormat;
+
+import frc.team3310.utility.Util;
 
 /**
  * A movement along an arc at constant curvature and velocity. We can use ideas from "differential calculus" to create

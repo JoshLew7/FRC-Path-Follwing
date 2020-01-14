@@ -1,7 +1,7 @@
 package frc.team3310.utility.lib.trajectory;
 
-import frc.team3310.utility.lib.geometry.State;
 import frc.team3310.utility.Util;
+import frc.team3310.utility.lib.geometry.State;
 
 public class DistanceView<S extends State<S>> implements TrajectoryView<S> {
     protected final Trajectory<S> trajectory_;

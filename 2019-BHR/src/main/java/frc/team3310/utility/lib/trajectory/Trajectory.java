@@ -1,10 +1,10 @@
 package frc.team3310.utility.lib.trajectory;
 
-import frc.team3310.utility.lib.geometry.State;
-import frc.team3310.utility.CSVWritable;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import frc.team3310.utility.CSVWritable;
+import frc.team3310.utility.lib.geometry.State;
 
 public class Trajectory<S extends State<S>> implements CSVWritable {
     protected final List<TrajectoryPoint<S>> points_;

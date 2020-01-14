@@ -1,9 +1,13 @@
 package frc.team3310.utility.lib.spline;
 
-import frc.team3310.utility.lib.geometry.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import frc.team3310.utility.lib.geometry.Pose2d;
+import frc.team3310.utility.lib.geometry.Pose2dWithCurvature;
+import frc.team3310.utility.lib.geometry.Rotation2d;
+import frc.team3310.utility.lib.geometry.Translation2d;
+import frc.team3310.utility.lib.geometry.Twist2d;
 
 public class SplineGenerator {
     private static final double kMaxDX = 2.0; //inches

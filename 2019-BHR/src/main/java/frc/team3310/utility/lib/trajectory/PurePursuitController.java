@@ -1,7 +1,11 @@
 package frc.team3310.utility.lib.trajectory;
 
-import frc.team3310.utility.lib.geometry.*;
 import frc.team3310.utility.Util;
+import frc.team3310.utility.lib.geometry.ITranslation2d;
+import frc.team3310.utility.lib.geometry.Pose2d;
+import frc.team3310.utility.lib.geometry.Rotation2d;
+import frc.team3310.utility.lib.geometry.Translation2d;
+import frc.team3310.utility.lib.geometry.Twist2d;
 
 public class PurePursuitController<S extends ITranslation2d<S>> implements IPathFollower {
     protected final TrajectoryIterator<S> iterator_;

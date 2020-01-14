@@ -1,17 +1,14 @@
 package frc.team3310.utility.lib.drivers;
 
-
-
 import java.util.ArrayList;
 import java.util.function.DoubleSupplier;
-import frc.team3310.utility.Util;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Subsystem;
-
+import frc.team3310.robot.subsystems.Subsystem;
+import frc.team3310.utility.Util;
 
 public class TalonSRXChecker {
 
@@ -21,15 +18,11 @@ public class TalonSRXChecker {
 
         public double mRPMFloor = 2000;
 
-
-
         public double mCurrentEpsilon = 5.0;
 
         public double mRPMEpsilon = 500;
 
         public DoubleSupplier mRPMSupplier = null;
-
-
 
         public double mRunTimeSec = 4.0;
 
@@ -38,7 +31,6 @@ public class TalonSRXChecker {
         public double mRunOutputPercentage = 0.5;
 
     }
-
 
     public static class TalonSRXConfig {
 
@@ -55,8 +47,6 @@ public class TalonSRXChecker {
 
     }
 
-
-
     private static class StoredTalonSRXConfiguration {
 
         public ControlMode mMode;
@@ -65,13 +55,11 @@ public class TalonSRXChecker {
 
     }
 
-
-
     public static boolean CheckTalons(Subsystem subsystem,
 
-                                      ArrayList<TalonSRXConfig> talonsToCheck,
+            ArrayList<TalonSRXConfig> talonsToCheck,
 
-                                      CheckerConfig checkerConfig) {
+            CheckerConfig checkerConfig) {
 
         boolean failure = false;
 
@@ -81,15 +69,11 @@ public class TalonSRXChecker {
 
                 + " for " + talonsToCheck.size() + " talons.");
 
-
-
         ArrayList<Double> currents = new ArrayList<>();
 
         ArrayList<Double> rpms = new ArrayList<>();
 
         ArrayList<StoredTalonSRXConfiguration> storedConfigurations = new ArrayList<>();
-
-
 
         // Record previous configuration for all talons.
 
@@ -97,19 +81,13 @@ public class TalonSRXChecker {
 
             LazyTalonSRX talon = LazyTalonSRX.class.cast(config.mTalon);
 
-
-
             StoredTalonSRXConfiguration configuration = new StoredTalonSRXConfiguration();
 
             configuration.mMode = talon.getControlMode();
 
-            //configuration.mSetValue = talon.getLastSet();
-
-
+            // configuration.mSetValue = talon.getLastSet();
 
             storedConfigurations.add(configuration);
-
-
 
             // Now set to disabled.
 
@@ -117,19 +95,13 @@ public class TalonSRXChecker {
 
         }
 
-
-
         for (TalonSRXConfig config : talonsToCheck) {
 
             System.out.println("Checking: " + config.mName);
 
-
-
             config.mTalon.set(ControlMode.PercentOutput, checkerConfig.mRunOutputPercentage);
 
             Timer.delay(checkerConfig.mRunTimeSec);
-
-
 
             // Now poll the interesting information.
 
@@ -138,8 +110,6 @@ public class TalonSRXChecker {
             currents.add(current);
 
             System.out.print("Current: " + current);
-
-
 
             double rpm = Double.NaN;
 
@@ -155,11 +125,7 @@ public class TalonSRXChecker {
 
             System.out.print('\n');
 
-
-
             config.mTalon.set(ControlMode.PercentOutput, 0.0);
-
-
 
             // And perform checks.
 
@@ -187,23 +153,15 @@ public class TalonSRXChecker {
 
             }
 
-
-
             Timer.delay(checkerConfig.mWaitTimeSec);
 
         }
 
-
-
         // Now run aggregate checks.
-
-
 
         if (currents.size() > 0) {
 
             Double average = currents.stream().mapToDouble(val -> val).average().getAsDouble();
-
-
 
             if (!Util.allCloseTo(currents, average, checkerConfig.mCurrentEpsilon)) {
 
@@ -215,13 +173,9 @@ public class TalonSRXChecker {
 
         }
 
-
-
         if (rpms.size() > 0) {
 
             Double average = rpms.stream().mapToDouble(val -> val).average().getAsDouble();
-
-
 
             if (!Util.allCloseTo(rpms, average, checkerConfig.mRPMEpsilon)) {
 
@@ -233,8 +187,6 @@ public class TalonSRXChecker {
 
         }
 
-
-
         // Restore Talon configurations
 
         for (int i = 0; i < talonsToCheck.size(); ++i) {
@@ -244,8 +196,6 @@ public class TalonSRXChecker {
                     storedConfigurations.get(i).mSetValue);
 
         }
-
-
 
         return !failure;
 

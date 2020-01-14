@@ -1,8 +1,8 @@
 package frc.team3310.utility.lib.trajectory;
 
+import frc.team3310.utility.Util;
 import frc.team3310.utility.lib.geometry.State;
 import frc.team3310.utility.lib.trajectory.timing.TimedState;
-import frc.team3310.utility.Util;
 
 public class TimedView<S extends State<S>> implements TrajectoryView<TimedState<S>> {
     protected final Trajectory<TimedState<S>> trajectory_;

@@ -1,8 +1,8 @@
 package frc.team3310.utility.lib.geometry;
 
-import frc.team3310.utility.Util;
-
 import java.text.DecimalFormat;
+
+import frc.team3310.utility.Util;
 
 public class Displacement1d implements State<Displacement1d> {
 

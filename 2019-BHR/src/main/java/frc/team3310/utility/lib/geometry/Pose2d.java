@@ -1,4 +1,5 @@
 package frc.team3310.utility.lib.geometry;
+
 import frc.team3310.utility.Util;
 
 /**

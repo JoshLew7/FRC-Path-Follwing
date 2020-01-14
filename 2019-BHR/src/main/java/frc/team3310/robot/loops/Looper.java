@@ -10,9 +10,8 @@ import frc.team3310.robot.Constants;
 import frc.team3310.utility.CrashTrackingRunnable;
 
 /**
- * This code runs all of the robot's loops. Loop objects are stored in a List
- * object. They are started when the robot powers up and stopped after the
- * match.
+ * This code runs all of the robot's loops. Loop objects are stored in a List object. They are started when the robot
+ * powers up and stopped after the match.
  */
 public class Looper implements ILooper {
     public final double kPeriod = Constants.kLooperDt;
@@ -49,6 +48,7 @@ public class Looper implements ILooper {
         loops_ = new ArrayList<>();
     }
 
+    @Override
     public synchronized void register(Loop loop) {
         synchronized (taskRunningLock_) {
             loops_.add(loop);
@@ -57,7 +57,7 @@ public class Looper implements ILooper {
 
     public synchronized void start() {
         if (!running_) {
-            // System.out.println("Starting loops");
+            System.out.println("Starting loops");
             synchronized (taskRunningLock_) {
                 timestamp_ = Timer.getFPGATimestamp();
                 for (Loop loop : loops_) {
@@ -71,13 +71,13 @@ public class Looper implements ILooper {
 
     public synchronized void stop() {
         if (running_) {
-            // System.out.println("Stopping loops");
+            System.out.println("Stopping loops");
             notifier_.stop();
             synchronized (taskRunningLock_) {
                 running_ = false;
                 timestamp_ = Timer.getFPGATimestamp();
                 for (Loop loop : loops_) {
-                    // System.out.println("Stopping " + loop);
+                    System.out.println("Stopping " + loop);
                     loop.onStop(timestamp_);
                 }
             }

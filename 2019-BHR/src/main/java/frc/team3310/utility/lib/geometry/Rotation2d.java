@@ -1,10 +1,10 @@
 package frc.team3310.utility.lib.geometry;
 
-import frc.team3310.utility.Util;
+import static frc.team3310.utility.Util.kEpsilon;
 
 import java.text.DecimalFormat;
 
-import static frc.team3310.utility.Util.kEpsilon;
+import frc.team3310.utility.Util;
 
 /**
  * A rotation in a 2d coordinate frame represented a point on the unit circle (cosine and sine).

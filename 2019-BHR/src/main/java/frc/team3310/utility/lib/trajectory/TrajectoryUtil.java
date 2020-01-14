@@ -3,16 +3,16 @@ package frc.team3310.utility.lib.trajectory;
 import java.util.ArrayList;
 import java.util.List;
 
+import frc.team3310.utility.Util;
 import frc.team3310.utility.lib.geometry.IPose2d;
 import frc.team3310.utility.lib.geometry.Pose2d;
 import frc.team3310.utility.lib.geometry.Pose2dWithCurvature;
+import frc.team3310.utility.lib.geometry.State;
 import frc.team3310.utility.lib.geometry.Twist2d;
 import frc.team3310.utility.lib.spline.QuinticHermiteSpline;
 import frc.team3310.utility.lib.spline.Spline;
 import frc.team3310.utility.lib.spline.SplineGenerator;
 import frc.team3310.utility.lib.trajectory.timing.TimedState;
-import frc.team3310.utility.Util;
-import frc.team3310.utility.lib.geometry.State;
 
 public class TrajectoryUtil {
     public static <S extends IPose2d<S>> Trajectory<S> mirror(final Trajectory<S> trajectory) {

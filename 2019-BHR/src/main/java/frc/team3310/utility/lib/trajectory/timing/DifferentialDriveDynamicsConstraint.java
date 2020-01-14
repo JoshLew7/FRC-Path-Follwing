@@ -1,10 +1,9 @@
 package frc.team3310.utility.lib.trajectory.timing;
 
+import frc.team3310.utility.Units;
 import frc.team3310.utility.lib.geometry.ICurvature;
 import frc.team3310.utility.lib.geometry.IPose2d;
-import frc.team3310.utility.Units;
-import frc.team3310.utility.lib.physics.*;
-
+import frc.team3310.utility.lib.physics.DifferentialDrive;
 
 public class DifferentialDriveDynamicsConstraint<S extends IPose2d<S> & ICurvature<S>> implements TimingConstraint<S> {
 
